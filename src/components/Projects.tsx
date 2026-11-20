@@ -21,15 +21,8 @@ function Cover({ p }: { p: Project }) {
       </div>
     );
   }
-  // Espaço reservado até a captura de tela chegar.
-  return (
-    <div className="bg-grid-soft relative flex aspect-[16/9] items-end overflow-hidden border-b border-line bg-bg p-6">
-      <div>
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-faint">{p.kind}</p>
-        <p className="mt-1 font-display text-3xl font-semibold tracking-tight text-text/80">{p.name}</p>
-      </div>
-    </div>
-  );
+  // Sem captura real, o card fica só com o texto.
+  return null;
 }
 
 function FeaturedCard({ p, number }: { p: Project; number: number }) {

@@ -216,15 +216,15 @@ export const kiroshi = {
   status: ["Em produção", "+500 commits", "Código privado"],
   stack: ["Node.js", "TypeScript", "Fastify", "WebSocket", "Prisma", "PostgreSQL", "LiveKit", "Electron", "React", "Zustand", "Docker"],
   images: [
-    { src: "/projetos/kiroshi-chamada.jpg", alt: "Kiroshi em uso: chamada com três transmissões de tela ao vivo e o bot de música tocando" },
-    { src: "/projetos/kiroshi-transmissao.jpg", alt: "Kiroshi: transmissão de jogo em foco, com aviso de quadros por segundo para quem transmite" },
+    { src: "/projetos/kiroshi-chamada.jpg", alt: "Kiroshi em uso: canal de voz com três transmissões de tela ao vivo ao mesmo tempo" },
+    { src: "/projetos/kiroshi-transmissao.jpg", alt: "Kiroshi: transmissão de jogo ao vivo em foco dentro da chamada" },
   ] as { src: string; alt: string }[],
   problem:
     "O grupo usava o Discord, e justamente o compartilhamento de tela e a câmera pararam de funcionar para eles. Queriam um substituto com os dados em servidor próprio e um instalador que cada pessoa roda uma vez.",
   solution: [
     "Canais de texto com markdown, anexos, reações, respostas, menções, busca e mensagens fixadas",
     "Voz e vídeo pelo LiveKit, com tela em até 1080p 60 fps, áudio do sistema e supressão de ruído local",
-    "Várias transmissões de tela ao mesmo tempo na mesma chamada, e um bot de música que toca os pedidos do grupo",
+    "Várias transmissões de tela ao mesmo tempo na mesma chamada",
     "Cargos com hierarquia e permissões granulares por canal, convites com validade e registro de auditoria",
     "Contas com 2FA (TOTP), senhas em Argon2id e tokens de renovação rotacionados a cada uso",
     "Instalador Windows que se atualiza em segundo plano, com bandeja, notificações nativas e reconexão automática",

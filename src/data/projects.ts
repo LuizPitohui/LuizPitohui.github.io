@@ -8,7 +8,13 @@ export type Project = {
   highlights: string[];
   stack: string[];
   categories: Category[];
-  repo: string;
+  /** Sem repo: código privado. */
+  repo?: string;
+  /** Endereço público para ver funcionando. */
+  demo?: string;
+  /** Caminho em /public. Sem imagem, o card mostra um espaço reservado. */
+  image?: string;
+  imageAlt?: string;
   featured?: boolean;
 };
 
@@ -81,8 +87,7 @@ export const projects: Project[] = [
     stack: ["Django REST", "ReportLab", "Next.js", "Tailwind", "Recharts", "Docker"],
     categories: ["Django", "Next.js", "Docker"],
     repo: gh("demolay-treasury"),
-    featured: true,
-  },
+    },
   {
     slug: "joias-platform",
     name: "Joias Platform",
@@ -98,8 +103,7 @@ export const projects: Project[] = [
     stack: ["Next.js", "TypeScript", "Tailwind", "Django REST", "SimpleJWT", "Docker"],
     categories: ["Django", "Next.js", "Docker", "WhatsApp"],
     repo: gh("joias-platform"),
-    featured: true,
-  },
+    },
   {
     slug: "nortetech-site",
     name: "Norte Tech Site",
@@ -115,8 +119,7 @@ export const projects: Project[] = [
     stack: ["Django 6", "DRF", "Bootstrap 5", "Jazzmin"],
     categories: ["Django"],
     repo: gh("NorteTech-Site"),
-    featured: true,
-  },
+    },
   {
     slug: "arasaka-data-fortress",
     name: "Arasaka Data Fortress",
@@ -200,3 +203,43 @@ export const projects: Project[] = [
 ];
 
 export const categories: Category[] = ["Django", "Next.js", "Docker", "Tempo real", "WhatsApp"];
+
+/** Estudo de caso em destaque no topo da seção de projetos. Código privado: sem link de repositório. */
+export const kiroshi = {
+  name: "Kiroshi",
+  kind: "Voz, vídeo e conversa auto-hospedados",
+  tagline:
+    "Um “Discord próprio” para um grupo fechado que precisava sair do Discord e manter os dados no próprio servidor.",
+  status: ["Em produção", "+500 commits", "Código privado"],
+  stack: ["Node.js", "TypeScript", "Fastify", "WebSocket", "Prisma", "PostgreSQL", "LiveKit", "Electron", "React", "Zustand", "Docker"],
+  // Capturas reais (com dados de exemplo) entram aqui: { src: "/projetos/arquivo.webp", alt: "..." }
+  images: [] as { src: string; alt: string }[],
+  problem:
+    "O grupo usava o Discord, e justamente o compartilhamento de tela e a câmera pararam de funcionar para eles. Queriam um substituto com os dados em servidor próprio e um instalador que cada pessoa roda uma vez.",
+  solution: [
+    "Canais de texto com markdown, anexos, reações, respostas, menções, busca e mensagens fixadas",
+    "Voz e vídeo pelo LiveKit, com tela em até 1080p 60 fps, áudio do sistema e supressão de ruído local",
+    "Cargos com hierarquia e permissões granulares por canal, convites com validade e registro de auditoria",
+    "Contas com 2FA (TOTP), senhas em Argon2id e tokens de renovação rotacionados a cada uso",
+    "Instalador Windows que se atualiza em segundo plano, com bandeja, notificações nativas e reconexão automática",
+  ],
+  architecture: [
+    { name: "shared", text: "Tipos, protocolo do gateway, permissões e validação, usados pelas duas pontas" },
+    { name: "server", text: "Fastify (REST) + WebSocket com protocolo próprio + Prisma/Postgres + LiveKit" },
+    { name: "desktop", text: "Electron com isolamento de contexto, React, Zustand e envio otimista de mensagens" },
+  ],
+  decisions: [
+    {
+      title: "Sinalização pelo túnel, mídia direto por IPv6",
+      text: "O servidor fica atrás de CGNAT e o túnel HTTP não transporta UDP, que é o que o WebRTC usa. Testei de fora que o IPv6 público era alcançável e mandei a mídia direto por ele; quem não tem IPv6 cai num relay TURN só para si. A chamada ficou sem intermediário.",
+    },
+    {
+      title: "A mesma função de permissões no servidor e no cliente",
+      text: "Um pacote shared no monorepo define o bitfield de 64 bits e a ordem de resolução (cargos, overwrites de canal, membro). O servidor autoriza com ela e o cliente decide quais botões mostrar. Mudar o protocolo quebra a compilação das duas pontas ao mesmo tempo, em vez de virar bug em produção.",
+    },
+    {
+      title: "Gateway com heartbeat e retomada de sessão",
+      text: "App de voz fica aberto o dia todo: a máquina hiberna, o Wi-Fi troca, o túnel reinicia. Cada sessão guarda os últimos 512 eventos; ao reconectar, o cliente manda o último número de sequência e recebe só o que perdeu, sem recarregar a interface.",
+    },
+  ],
+};

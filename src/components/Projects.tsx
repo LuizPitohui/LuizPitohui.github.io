@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { categories, projects, type Category, type Project } from "@/data/projects";
-import { ArrowIcon } from "./Icons";
+import { asset } from "@/lib/asset";
+import { ArrowIcon, GitHubIcon } from "./Icons";
+import KiroshiCase from "./KiroshiCase";
 
 function Tag({ children }: { children: React.ReactNode }) {
   return (
@@ -10,25 +12,36 @@ function Tag({ children }: { children: React.ReactNode }) {
   );
 }
 
-function FeaturedCard({ p, index }: { p: Project; index: number }) {
+function Cover({ p }: { p: Project }) {
+  if (p.image) {
+    return (
+      <div className="aspect-[16/9] overflow-hidden border-b border-line bg-bg">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={asset(p.image)} alt={p.imageAlt ?? p.name} loading="lazy" className="h-full w-full object-cover object-top" />
+      </div>
+    );
+  }
+  // Espaço reservado até a captura de tela chegar.
   return (
-    <article className="group flex flex-col rounded-2xl border border-line bg-surface p-6 transition-colors hover:border-line-strong sm:p-7">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="font-mono text-xs text-accent">
-            {String(index + 1).padStart(2, "0")} · {p.kind}
-          </p>
-          <h3 className="mt-2 font-display text-2xl font-semibold tracking-tight">{p.name}</h3>
-        </div>
-        <a
-          href={p.repo}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={`Código de ${p.name} no GitHub`}
-          className="shrink-0 rounded-full border border-line p-2 text-muted transition-colors group-hover:border-accent group-hover:text-accent"
-        >
-          <ArrowIcon className="h-4 w-4" />
-        </a>
+    <div className="bg-grid-soft relative flex aspect-[16/9] items-end overflow-hidden border-b border-line bg-bg p-6">
+      <div>
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-faint">{p.kind}</p>
+        <p className="mt-1 font-display text-3xl font-semibold tracking-tight text-text/80">{p.name}</p>
+      </div>
+    </div>
+  );
+}
+
+function FeaturedCard({ p, number }: { p: Project; number: number }) {
+  return (
+    <article className="flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-colors hover:border-line-strong">
+      <Cover p={p} />
+      <div className="flex flex-1 flex-col p-6 sm:p-7">
+      <div>
+        <p className="font-mono text-xs text-accent">
+          {String(number).padStart(2, "0")} · {p.kind}
+        </p>
+        <h3 className="mt-2 font-display text-2xl font-semibold tracking-tight">{p.name}</h3>
       </div>
       <p className="mt-4 leading-relaxed text-muted">{p.summary}</p>
       <ul className="mt-5 space-y-2 text-sm">
@@ -43,6 +56,31 @@ function FeaturedCard({ p, index }: { p: Project; index: number }) {
         {p.stack.map((s) => (
           <Tag key={s}>{s}</Tag>
         ))}
+      </div>
+      <div className="mt-6 flex flex-wrap gap-2 border-t border-line pt-5 text-sm">
+        {p.demo && (
+          <a
+            href={p.demo}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 font-semibold text-bg transition-opacity hover:opacity-90"
+          >
+            Ver funcionando <ArrowIcon className="h-3.5 w-3.5" />
+          </a>
+        )}
+        {p.repo ? (
+          <a
+            href={p.repo}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-line-strong px-4 py-2 transition-colors hover:border-accent hover:text-accent"
+          >
+            <GitHubIcon className="h-3.5 w-3.5" /> Código
+          </a>
+        ) : (
+          <span className="inline-flex items-center rounded-full border border-line px-4 py-2 text-faint">Código privado</span>
+        )}
+      </div>
       </div>
     </article>
   );
@@ -100,10 +138,16 @@ export default function Projects() {
         })}
       </div>
 
+      {(filter === "Todos" || filter === "Tempo real" || filter === "Docker") && (
+        <div className="mt-8">
+          <KiroshiCase />
+        </div>
+      )}
+
       {featured.length > 0 && (
-        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+        <div className="mt-5 grid gap-5 lg:grid-cols-3">
           {featured.map((p) => (
-            <FeaturedCard key={p.slug} p={p} index={projects.indexOf(p)} />
+            <FeaturedCard key={p.slug} p={p} number={projects.filter((x) => x.featured).indexOf(p) + 2} />
           ))}
         </div>
       )}

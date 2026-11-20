@@ -169,7 +169,7 @@ export default function Home() {
         <section className="border-t border-line">
           <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-24">
             <div className="flex flex-wrap items-end justify-between gap-6">
-              <SectionTitle id="projetos" eyebrow="Projetos" title="Sistemas que construí, com o código aberto no GitHub." />
+              <SectionTitle id="projetos" eyebrow="Projetos" title="Sistemas que construí: um estudo de caso em produção e o código aberto no GitHub." />
               <a
                 href={`${profile.github}?tab=repositories`}
                 target="_blank"

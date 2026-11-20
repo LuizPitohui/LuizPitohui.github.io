@@ -59,6 +59,15 @@ body {
   mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
 }
 
+/* Fundo dos espaços reservados para captura de tela */
+.bg-grid-soft {
+  background-image:
+    radial-gradient(ellipse 80% 70% at 85% 0%, var(--accent-soft), transparent 60%),
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+}
+
 @keyframes blink {
   50% { opacity: 0; }
 }
